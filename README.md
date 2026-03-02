@@ -24,7 +24,7 @@
 
 ## 1) System Architecture
 
-![System Architecture](./docs/images/architecture.jpg)
+![System Architecture](./docs/images/architecture.svg)
 
 ### Components
 
