@@ -1,0 +1,196 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION     = "us-east-1"
+        AWS_ACCOUNT_ID = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
+        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        ECR_REPO       = "${ECR_REGISTRY}/monolithic-deployment/backend"
+        IMAGE_TAG      = "${BUILD_NUMBER}"
+    }
+
+    parameters {
+        string(
+            name: 'GIT_BRANCH',
+            defaultValue: 'main',
+            description: 'Branch to build Backend'
+        )
+        string(
+            name: 'BACKEND_INSTANCE_ID',
+            defaultValue: 'i-xxxxxxxxxxxxxxxxx',
+            description: 'EC2 Instance ID for Backend'
+        )
+        string(
+            name: 'DB_HOST',
+            defaultValue: '',
+            description: 'RDS Endpoint'
+        )
+        string(
+            name: 'DB_NAME',
+            defaultValue: 'appdb',
+            description: 'Database name'
+        )
+        booleanParam(
+            name: 'RUN_DB_INIT',
+            defaultValue: false,
+            description: 'Run init.sql against RDS (first deployment only)'
+        )
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: "${params.GIT_BRANCH}",
+                    url: 'https://github.com/<your-org>/monolithic-deployment.git',
+                    credentialsId: 'github-credentials'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('app/backend') {
+                    sh """
+                        docker build \
+                            -t ${ECR_REPO}:${IMAGE_TAG} \
+                            -t ${ECR_REPO}:latest \
+                            .
+                    """
+                }
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh """
+                    aws ecr get-login-password --region ${AWS_REGION} \
+                        | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+
+                    docker push ${ECR_REPO}:${IMAGE_TAG}
+                    docker push ${ECR_REPO}:latest
+                """
+            }
+        }
+
+        stage('Initialize Database') {
+            when {
+                expression { return params.RUN_DB_INIT == true }
+            }
+            steps {
+                script {
+                    withCredentials([
+                        string(credentialsId: 'db-username', variable: 'DB_USER'),
+                        string(credentialsId: 'db-password', variable: 'DB_PASS')
+                    ]) {
+                        def sqlContent = readFile('app/database/init.sql')
+                            .replace("'", "'\\''")
+
+                        def commandId = sh(
+                            script: """
+                                aws ssm send-command \
+                                    --region ${AWS_REGION} \
+                                    --instance-ids ${params.BACKEND_INSTANCE_ID} \
+                                    --document-name "AWS-RunShellScript" \
+                                    --parameters 'commands=[
+                                        "mkdir -p /tmp/db-init",
+                                        "cat > /tmp/db-init/init.sql << '\''SQLEOF'\''\\n${sqlContent}\\nSQLEOF",
+                                        "docker run --rm -v /tmp/db-init:/db-init mysql:8 mysql -h ${params.DB_HOST} -u ${DB_USER} -p${DB_PASS} ${params.DB_NAME} < /db-init/init.sql",
+                                        "rm -rf /tmp/db-init"
+                                    ]' \
+                                    --output text \
+                                    --query Command.CommandId
+                            """,
+                            returnStdout: true
+                        ).trim()
+
+                        waitForSSM(commandId, params.BACKEND_INSTANCE_ID)
+                        echo "Database initialized successfully."
+                    }
+                }
+            }
+        }
+
+        stage('Deploy via SSM') {
+            steps {
+                script {
+                    withCredentials([
+                        string(credentialsId: 'db-username', variable: 'DB_USER'),
+                        string(credentialsId: 'db-password', variable: 'DB_PASS')
+                    ]) {
+                        def commandId = sh(
+                            script: """
+                                aws ssm send-command \
+                                    --region ${AWS_REGION} \
+                                    --instance-ids ${params.BACKEND_INSTANCE_ID} \
+                                    --document-name "AWS-RunShellScript" \
+                                    --parameters 'commands=[
+                                        "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}",
+                                        "docker pull ${ECR_REPO}:${IMAGE_TAG}",
+                                        "docker stop backend || true",
+                                        "docker rm backend || true",
+                                        "docker run -d --name backend --restart always -p 5000:5000 -e DB_HOST=${params.DB_HOST} -e DB_NAME=${params.DB_NAME} -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} -e NODE_ENV=production ${ECR_REPO}:${IMAGE_TAG}",
+                                        "docker image prune -f"
+                                    ]' \
+                                    --output text \
+                                    --query Command.CommandId
+                            """,
+                            returnStdout: true
+                        ).trim()
+
+                        waitForSSM(commandId, params.BACKEND_INSTANCE_ID)
+                    }
+                }
+            }
+        }
+
+        stage('Cleanup Local Images') {
+            steps {
+                sh """
+                    docker rmi ${ECR_REPO}:${IMAGE_TAG} || true
+                    docker rmi ${ECR_REPO}:latest || true
+                """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Backend deployed successfully. Image tag: ${IMAGE_TAG}"
+        }
+        failure {
+            echo "Backend deployment failed."
+        }
+    }
+}
+
+def waitForSSM(String commandId, String instanceId) {
+    timeout(time: 5, unit: 'MINUTES') {
+        waitUntil(initialRecurrencePeriod: 5000) {
+            def status = sh(
+                script: """
+                    aws ssm get-command-invocation \
+                        --region ${AWS_REGION} \
+                        --command-id ${commandId} \
+                        --instance-id ${instanceId} \
+                        --query Status \
+                        --output text
+                """,
+                returnStdout: true
+            ).trim()
+
+            if (status in ['Failed', 'Cancelled', 'TimedOut']) {
+                sh """
+                    aws ssm get-command-invocation \
+                        --region ${AWS_REGION} \
+                        --command-id ${commandId} \
+                        --instance-id ${instanceId} \
+                        --query StandardErrorContent \
+                        --output text
+                """
+                error("SSM command failed with status: ${status}")
+            }
+
+            return status == 'Success'
+        }
+    }
+}
