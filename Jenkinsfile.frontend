@@ -27,8 +27,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: "${params.GIT_BRANCH}",
-                    url: 'https://github.com/Heahaidu/monolithic-deployment.git',
-                    // credentialsId: 'github-credentials'
+                    url: 'https://github.com/Heahaidu/monolithic-deployment.git'
             }
         }
 
@@ -71,7 +70,7 @@ pipeline {
                                     "docker pull ${ECR_REPO}:${IMAGE_TAG}",
                                     "docker stop frontend || true",
                                     "docker rm frontend || true",
-                                    "docker run -d --name frontend --restart always -p 80:80 ${ECR_REPO}:${IMAGE_TAG}",
+                                    "docker run -d --name frontend --restart always -p 80:5173 ${ECR_REPO}:${IMAGE_TAG}",
                                     "docker image prune -f"
                                 ]' \
                                 --output text \
