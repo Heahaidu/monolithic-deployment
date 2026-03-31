@@ -21,15 +21,6 @@ variable "max_size" {
   default = 5
 }
 
-variable "frontend_launch_template_id" {
-  type = string
-}
-
-variable "backend_launch_template_id" {
-  type = string
-}
-
-
 variable "max_threshod" {
   type = number
   default = 70
@@ -44,10 +35,20 @@ variable "private_subnet_ids" {
   type = list(string)
 }
 
-variable "frontend_target_group_arn" {
-  type = string
+variable "frontend_target_group_arns" {
+  type = object({
+    blue = string
+    green = string
+  })
 }
 
-variable "backend_target_group_arn" {
+variable "backend_target_group_arns" {
+  type = object({
+    blue = string
+    green = string
+  })
+}
+
+variable "launch_template_id" {
   type = string
 }
