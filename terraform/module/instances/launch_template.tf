@@ -15,7 +15,7 @@ resource "aws_launch_template" "launch_template" {
     associate_public_ip_address = false
   }
 
-  user_data = base64encode(templatefile("${path.module}/scripts/launch_template.sh"))
+  user_data = base64encode(templatefile("${path.module}/scripts/launch-template.sh"))
 
   block_device_mappings {
     device_name = "/dev/xvda"
