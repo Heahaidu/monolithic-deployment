@@ -2,14 +2,23 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION     = "us-east-1"
-        AWS_ACCOUNT_ID = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
-        ECR_REGISTRY   = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        ECR_REPO       = "${ECR_REGISTRY}/monolithic-deployment/frontend"
-        IMAGE_TAG      = "${BUILD_NUMBER}"
+        PROJECT_NAME    = "monolithic-deployment"
+
+        AWS_REGION      = "us-east-1"
+        AWS_ACCOUNT_ID  = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
+        ECR_REGISTRY    = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        ECR_REPO        = "${ECR_REGISTRY}/${PROJECT_NAME}/frontend"
+        IMAGE_TAG       = "${BUILD_NUMBER}"
+        ECS_CLUSTER     = ""
+        ECS_SERVICE     = ""
     }
 
     parameters {
+        string(
+            name: 'PROJECT_NAME'
+            defaultValue: 'monolithic-deployment'
+            description: 'Name of the project equal to the project_name variable in terraform'
+        )
         string(
             name: 'GIT_BRANCH',
             defaultValue: 'main',
@@ -23,14 +32,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: "${params.GIT_BRANCH}",
-                    url: 'https://github.com/Heahaidu/monolithic-deployment.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 dir('app/frontend') {
@@ -56,82 +57,82 @@ pipeline {
             }
         }
 
-        stage('Deploy via SSM') {
-            steps {
-                script {
-                    def commandId = sh(
-                        script: """
-                            aws ssm send-command \
-                                --region ${AWS_REGION} \
-                                --instance-ids ${params.FRONTEND_INSTANCE_ID} \
-                                --document-name "AWS-RunShellScript" \
-                                --parameters 'commands=[
-                                    "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}",
-                                    "docker pull ${ECR_REPO}:${IMAGE_TAG}",
-                                    "docker stop frontend || true",
-                                    "docker rm frontend || true",
-                                    "docker run -d --name frontend --restart always -p 80:5173 ${ECR_REPO}:${IMAGE_TAG}",
-                                    "docker image prune -f"
-                                ]' \
-                                --output text \
-                                --query Command.CommandId
-                        """,
-                        returnStdout: true
-                    ).trim()
+    //     stage('Deploy via SSM') {
+    //         steps {
+    //             script {
+    //                 def commandId = sh(
+    //                     script: """
+    //                         aws ssm send-command \
+    //                             --region ${AWS_REGION} \
+    //                             --instance-ids ${params.FRONTEND_INSTANCE_ID} \
+    //                             --document-name "AWS-RunShellScript" \
+    //                             --parameters 'commands=[
+    //                                 "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}",
+    //                                 "docker pull ${ECR_REPO}:${IMAGE_TAG}",
+    //                                 "docker stop frontend || true",
+    //                                 "docker rm frontend || true",
+    //                                 "docker run -d --name frontend --restart always -p 80:5173 ${ECR_REPO}:${IMAGE_TAG}",
+    //                                 "docker image prune -f"
+    //                             ]' \
+    //                             --output text \
+    //                             --query Command.CommandId
+    //                     """,
+    //                     returnStdout: true
+    //                 ).trim()
 
-                    waitForSSM(commandId, params.FRONTEND_INSTANCE_ID)
-                }
-            }
-        }
+    //                 waitForSSM(commandId, params.FRONTEND_INSTANCE_ID)
+    //             }
+    //         }
+    //     }
 
-        stage('Cleanup Local Images') {
-            steps {
-                sh """
-                    docker rmi ${ECR_REPO}:${IMAGE_TAG} || true
-                    docker rmi ${ECR_REPO}:latest || true
-                """
-            }
-        }
-    }
+    //     stage('Cleanup Local Images') {
+    //         steps {
+    //             sh """
+    //                 docker rmi ${ECR_REPO}:${IMAGE_TAG} || true
+    //                 docker rmi ${ECR_REPO}:latest || true
+    //             """
+    //         }
+    //     }
+    // }
 
-    post {
-        success {
-            echo "Frontend deployed successfully. Image tag: ${IMAGE_TAG}"
-        }
-        failure {
-            echo "Frontend deployment failed."
-        }
-    }
+    // post {
+    //     success {
+    //         echo "Frontend deployed successfully. Image tag: ${IMAGE_TAG}"
+    //     }
+    //     failure {
+    //         echo "Frontend deployment failed."
+    //     }
+    // }
 }
 
-def waitForSSM(String commandId, String instanceId) {
-    timeout(time: 5, unit: 'MINUTES') {
-        waitUntil(initialRecurrencePeriod: 5000) {
-            def status = sh(
-                script: """
-                    aws ssm get-command-invocation \
-                        --region ${AWS_REGION} \
-                        --command-id ${commandId} \
-                        --instance-id ${instanceId} \
-                        --query Status \
-                        --output text
-                """,
-                returnStdout: true
-            ).trim()
+// def waitForSSM(String commandId, String instanceId) {
+//     timeout(time: 5, unit: 'MINUTES') {
+//         waitUntil(initialRecurrencePeriod: 5000) {
+//             def status = sh(
+//                 script: """
+//                     aws ssm get-command-invocation \
+//                         --region ${AWS_REGION} \
+//                         --command-id ${commandId} \
+//                         --instance-id ${instanceId} \
+//                         --query Status \
+//                         --output text
+//                 """,
+//                 returnStdout: true
+//             ).trim()
 
-            if (status in ['Failed', 'Cancelled', 'TimedOut']) {
-                sh """
-                    aws ssm get-command-invocation \
-                        --region ${AWS_REGION} \
-                        --command-id ${commandId} \
-                        --instance-id ${instanceId} \
-                        --query StandardErrorContent \
-                        --output text
-                """
-                error("SSM command failed with status: ${status}")
-            }
+//             if (status in ['Failed', 'Cancelled', 'TimedOut']) {
+//                 sh """
+//                     aws ssm get-command-invocation \
+//                         --region ${AWS_REGION} \
+//                         --command-id ${commandId} \
+//                         --instance-id ${instanceId} \
+//                         --query StandardErrorContent \
+//                         --output text
+//                 """
+//                 error("SSM command failed with status: ${status}")
+//             }
 
-            return status == 'Success'
-        }
-    }
-}
+//             return status == 'Success'
+//         }
+//     }
+// }
