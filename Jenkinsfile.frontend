@@ -103,7 +103,7 @@ pipeline {
     //         echo "Frontend deployment failed."
     //     }
     // }
-}
+    }
 
 // def waitForSSM(String commandId, String instanceId) {
 //     timeout(time: 5, unit: 'MINUTES') {
@@ -135,4 +135,4 @@ pipeline {
 //             return status == 'Success'
 //         }
 //     }
-// }
+}
