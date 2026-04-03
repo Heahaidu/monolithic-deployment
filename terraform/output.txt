@@ -1,0 +1,1997 @@
+module.instances.data.aws_caller_identity.current: Reading...
+data.aws_caller_identity.current: Reading...
+module.networks.aws_vpc.app_vpc: Refreshing state... [id=vpc-0c3c4eb476d89b420]
+module.instances.aws_iam_role.instance_role: Refreshing state... [id=monolithic-instance-role]
+data.aws_caller_identity.current: Read complete after 0s [id=852368830719]
+module.instances.data.aws_caller_identity.current: Read complete after 0s [id=852368830719]
+module.instances.aws_iam_instance_profile.instance_profile: Refreshing state... [id=monolithic-instance-profile]
+module.networks.aws_subnet.private_subnet_app_1: Refreshing state... [id=subnet-088e62754217e19f7]
+module.networks.aws_security_group.frontend_security_group: Refreshing state... [id=sg-0aedd7ce43fa0bcd3]
+module.networks.aws_subnet.private_subnet_app_2: Refreshing state... [id=subnet-0682f1c8c493d85dd]
+module.networks.aws_security_group.backend_security_group: Refreshing state... [id=sg-01a77e356f6187633]
+module.instances.aws_launch_template.launch_template: Refreshing state... [id=lt-00b269fb96c8adef7]
+module.asg.aws_autoscaling_group.ecs: Refreshing state... [id=monolithic-ecs-asg]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # module.alb.aws_alb_listener.backend_lb_listener will be created
+  + resource "aws_alb_listener" "backend_lb_listener" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 5000
+      + protocol                                                              = "HTTP"
+      + region                                                                = "us-east-1"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags_all                                                              = (known after apply)
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.alb.aws_alb_listener.frontend_lb_listener will be created
+  + resource "aws_alb_listener" "frontend_lb_listener" {
+      + arn                                                                   = (known after apply)
+      + id                                                                    = (known after apply)
+      + load_balancer_arn                                                     = (known after apply)
+      + port                                                                  = 80
+      + protocol                                                              = "HTTP"
+      + region                                                                = "us-east-1"
+      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
+      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
+      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
+      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
+      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
+      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
+      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
+      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
+      + routing_http_response_access_control_max_age_header_value             = (known after apply)
+      + routing_http_response_content_security_policy_header_value            = (known after apply)
+      + routing_http_response_server_enabled                                  = (known after apply)
+      + routing_http_response_strict_transport_security_header_value          = (known after apply)
+      + routing_http_response_x_content_type_options_header_value             = (known after apply)
+      + routing_http_response_x_frame_options_header_value                    = (known after apply)
+      + ssl_policy                                                            = (known after apply)
+      + tags_all                                                              = (known after apply)
+      + tcp_idle_timeout_seconds                                              = (known after apply)
+
+      + default_action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + mutual_authentication (known after apply)
+    }
+
+  # module.alb.aws_iam_role.alb_role will be created
+  + resource "aws_iam_role" "alb_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ec2.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "monolithic-alb-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.alb.aws_iam_role_policy.alb_role_policy will be created
+  + resource "aws_iam_role_policy" "alb_role_policy" {
+      + id          = (known after apply)
+      + name        = "monolithic-alb-role-policy"
+      + name_prefix = (known after apply)
+      + policy      = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ec2:AuthorizeSecurityGroupIngress",
+                          + "ec2:Describe*",
+                          + "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                          + "elasticloadbalancing:DeregisterTargets",
+                          + "elasticloadbalancing:Describe*",
+                          + "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                          + "elasticloadbalancing:RegisterTargets",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "AmazonEC2ContainerServiceRole"
+                    },
+                  + {
+                      + Action   = [
+                          + "elasticloadbalancing:DescribeListeners",
+                          + "elasticloadbalancing:DescribeRules",
+                          + "elasticloadbalancing:DescribeTargetGroups",
+                          + "elasticloadbalancing:DescribeTargetHealth",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "ELBReadOperations"
+                    },
+                  + {
+                      + Action   = [
+                          + "elasticloadbalancing:RegisterTargets",
+                          + "elasticloadbalancing:DeregisterTargets",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:elasticloadbalancing:*:*:targetgroup/*/*"
+                      + Sid      = "TargetGroupOperations"
+                    },
+                  + {
+                      + Action   = "elasticloadbalancing:ModifyListener"
+                      + Effect   = "Allow"
+                      + Resource = [
+                          + "arn:aws:elasticloadbalancing:*:*:listener/app/*/*/*",
+                        ]
+                      + Sid      = "ALBModifyListeners"
+                    },
+                  + {
+                      + Action   = "elasticloadbalancing:ModifyListener"
+                      + Effect   = "Allow"
+                      + Resource = [
+                          + "arn:aws:elasticloadbalancing:*:*:listener/net/*/*/*",
+                        ]
+                      + Sid      = "NLBModifyListeners"
+                    },
+                  + {
+                      + Action   = "elasticloadbalancing:ModifyRule"
+                      + Effect   = "Allow"
+                      + Resource = [
+                          + "arn:aws:elasticloadbalancing:*:*:listener-rule/app/*/*/*/*",
+                        ]
+                      + Sid      = "ALBModifyRules"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role        = "monolithic-alb-role"
+    }
+
+  # module.alb.aws_lb.app_lb will be created
+  + resource "aws_lb" "app_lb" {
+      + arn                                                          = (known after apply)
+      + arn_suffix                                                   = (known after apply)
+      + client_keep_alive                                            = 3600
+      + desync_mitigation_mode                                       = "defensive"
+      + dns_name                                                     = (known after apply)
+      + drop_invalid_header_fields                                   = false
+      + enable_deletion_protection                                   = false
+      + enable_http2                                                 = true
+      + enable_tls_version_and_cipher_suite_headers                  = false
+      + enable_waf_fail_open                                         = false
+      + enable_xff_client_port                                       = false
+      + enable_zonal_shift                                           = false
+      + enforce_security_group_inbound_rules_on_private_link_traffic = (known after apply)
+      + id                                                           = (known after apply)
+      + idle_timeout                                                 = 60
+      + internal                                                     = false
+      + ip_address_type                                              = (known after apply)
+      + load_balancer_type                                           = "application"
+      + name                                                         = "monolithic-app-lb"
+      + name_prefix                                                  = (known after apply)
+      + preserve_host_header                                         = false
+      + region                                                       = "us-east-1"
+      + secondary_ips_auto_assigned_per_subnet                       = (known after apply)
+      + security_groups                                              = (known after apply)
+      + subnets                                                      = (known after apply)
+      + tags                                                         = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-app-lb"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                                     = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-app-lb"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                                       = (known after apply)
+      + xff_header_processing_mode                                   = "append"
+      + zone_id                                                      = (known after apply)
+
+      + subnet_mapping (known after apply)
+    }
+
+  # module.alb.aws_lb_listener_rule.backend_rule will be created
+  + resource "aws_lb_listener_rule" "backend_rule" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = (known after apply)
+      + priority     = 10
+      + region       = "us-east-1"
+      + tags_all     = (known after apply)
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + regex_values = []
+              + values       = [
+                  + "/api/*",
+                ]
+            }
+        }
+    }
+
+  # module.alb.aws_lb_listener_rule.frontend_rule will be created
+  + resource "aws_lb_listener_rule" "frontend_rule" {
+      + arn          = (known after apply)
+      + id           = (known after apply)
+      + listener_arn = (known after apply)
+      + priority     = 20
+      + region       = "us-east-1"
+      + tags_all     = (known after apply)
+
+      + action {
+          + order            = (known after apply)
+          + target_group_arn = (known after apply)
+          + type             = "forward"
+        }
+
+      + condition {
+          + path_pattern {
+              + regex_values = []
+              + values       = [
+                  + "/*",
+                ]
+            }
+        }
+    }
+
+  # module.alb.aws_lb_target_group.backend_target_group_blue will be created
+  + resource "aws_lb_target_group" "backend_target_group_blue" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "monolithic-backend-tg-blue"
+      + name_prefix                        = (known after apply)
+      + port                               = 5000
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "us-east-1"
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + target_type                        = "ip"
+      + vpc_id                             = "vpc-0c3c4eb476d89b420"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 60
+          + matcher             = "200-399"
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = 10
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.alb.aws_lb_target_group.backend_target_group_green will be created
+  + resource "aws_lb_target_group" "backend_target_group_green" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "monolithic-backend-tg-green"
+      + name_prefix                        = (known after apply)
+      + port                               = 5000
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "us-east-1"
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + target_type                        = "ip"
+      + vpc_id                             = "vpc-0c3c4eb476d89b420"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 60
+          + matcher             = "200-399"
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = 10
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.alb.aws_lb_target_group.frontend_target_group_blue will be created
+  + resource "aws_lb_target_group" "frontend_target_group_blue" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "monolithic-frontend-tg-blue"
+      + name_prefix                        = (known after apply)
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "us-east-1"
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + target_type                        = "ip"
+      + vpc_id                             = "vpc-0c3c4eb476d89b420"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 60
+          + matcher             = "200-399"
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = 10
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.alb.aws_lb_target_group.frontend_target_group_green will be created
+  + resource "aws_lb_target_group" "frontend_target_group_green" {
+      + arn                                = (known after apply)
+      + arn_suffix                         = (known after apply)
+      + connection_termination             = (known after apply)
+      + deregistration_delay               = "300"
+      + id                                 = (known after apply)
+      + ip_address_type                    = (known after apply)
+      + lambda_multi_value_headers_enabled = false
+      + load_balancer_arns                 = (known after apply)
+      + load_balancing_algorithm_type      = (known after apply)
+      + load_balancing_anomaly_mitigation  = (known after apply)
+      + load_balancing_cross_zone_enabled  = (known after apply)
+      + name                               = "monolithic-frontend-tg-green"
+      + name_prefix                        = (known after apply)
+      + port                               = 80
+      + preserve_client_ip                 = (known after apply)
+      + protocol                           = "HTTP"
+      + protocol_version                   = (known after apply)
+      + proxy_protocol_v2                  = false
+      + region                             = "us-east-1"
+      + slow_start                         = 0
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + target_type                        = "ip"
+      + vpc_id                             = "vpc-0c3c4eb476d89b420"
+
+      + health_check {
+          + enabled             = true
+          + healthy_threshold   = 2
+          + interval            = 60
+          + matcher             = "200-399"
+          + path                = (known after apply)
+          + port                = "traffic-port"
+          + protocol            = "HTTP"
+          + timeout             = 10
+          + unhealthy_threshold = 2
+        }
+
+      + stickiness (known after apply)
+
+      + target_failover (known after apply)
+
+      + target_group_health (known after apply)
+
+      + target_health_state (known after apply)
+    }
+
+  # module.asg.aws_autoscaling_group.ecs will be updated in-place
+  ~ resource "aws_autoscaling_group" "ecs" {
+      ~ desired_capacity                 = 0 -> 1
+        id                               = "monolithic-ecs-asg"
+      ~ max_size                         = 0 -> 5
+      ~ min_size                         = 0 -> 1
+        name                             = "monolithic-ecs-asg"
+        # (29 unchanged attributes hidden)
+
+      - tag {
+          - key                 = "AmazonECSManaged" -> null
+          - propagate_at_launch = true -> null
+            # (1 unchanged attribute hidden)
+        }
+
+        # (4 unchanged blocks hidden)
+    }
+
+  # module.ecr.aws_ecr_lifecycle_policy.backend will be created
+  + resource "aws_ecr_lifecycle_policy" "backend" {
+      + id          = (known after apply)
+      + policy      = jsonencode(
+            {
+              + rules = [
+                  + {
+                      + action       = {
+                          + type = "expire"
+                        }
+                      + description  = "Keep last 5 images"
+                      + rulePriority = 1
+                      + selection    = {
+                          + countNumber = 5
+                          + countType   = "imageCountMoreThan"
+                          + tagStatus   = "any"
+                        }
+                    },
+                ]
+            }
+        )
+      + region      = "us-east-1"
+      + registry_id = (known after apply)
+      + repository  = "monolithic/backend"
+    }
+
+  # module.ecr.aws_ecr_lifecycle_policy.frontend will be created
+  + resource "aws_ecr_lifecycle_policy" "frontend" {
+      + id          = (known after apply)
+      + policy      = jsonencode(
+            {
+              + rules = [
+                  + {
+                      + action       = {
+                          + type = "expire"
+                        }
+                      + description  = "Keep last 5 images"
+                      + rulePriority = 1
+                      + selection    = {
+                          + countNumber = 5
+                          + countType   = "imageCountMoreThan"
+                          + tagStatus   = "any"
+                        }
+                    },
+                ]
+            }
+        )
+      + region      = "us-east-1"
+      + registry_id = (known after apply)
+      + repository  = "monolithic/frontend"
+    }
+
+  # module.ecr.aws_ecr_repository.backend will be created
+  + resource "aws_ecr_repository" "backend" {
+      + arn                  = (known after apply)
+      + id                   = (known after apply)
+      + image_tag_mutability = "MUTABLE"
+      + name                 = "monolithic/backend"
+      + region               = "us-east-1"
+      + registry_id          = (known after apply)
+      + repository_url       = (known after apply)
+      + tags                 = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+
+      + image_scanning_configuration {
+          + scan_on_push = true
+        }
+    }
+
+  # module.ecr.aws_ecr_repository.frontend will be created
+  + resource "aws_ecr_repository" "frontend" {
+      + arn                  = (known after apply)
+      + id                   = (known after apply)
+      + image_tag_mutability = "MUTABLE"
+      + name                 = "monolithic/frontend"
+      + region               = "us-east-1"
+      + registry_id          = (known after apply)
+      + repository_url       = (known after apply)
+      + tags                 = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+
+      + image_scanning_configuration {
+          + scan_on_push = true
+        }
+    }
+
+  # module.ecs.aws_cloudwatch_log_group.main will be created
+  + resource "aws_cloudwatch_log_group" "main" {
+      + arn                         = (known after apply)
+      + deletion_protection_enabled = (known after apply)
+      + id                          = (known after apply)
+      + log_group_class             = (known after apply)
+      + name                        = "/aws/ecs/monolithic"
+      + name_prefix                 = (known after apply)
+      + region                      = "us-east-1"
+      + retention_in_days           = 7
+      + skip_destroy                = false
+      + tags                        = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                    = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+    }
+
+  # module.ecs.aws_ecs_capacity_provider.main will be created
+  + resource "aws_ecs_capacity_provider" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "monolithic-provider"
+      + region   = "us-east-1"
+      + tags     = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+
+      + auto_scaling_group_provider {
+          + auto_scaling_group_arn         = "arn:aws:autoscaling:us-east-1:852368830719:autoScalingGroup:7a880ac0-b97b-4cc7-badb-a3bf2356bdbf:autoScalingGroupName/monolithic-ecs-asg"
+          + managed_draining               = (known after apply)
+          + managed_termination_protection = "ENABLED"
+
+          + managed_scaling {
+              + instance_warmup_period    = (known after apply)
+              + maximum_scaling_step_size = 1000
+              + minimum_scaling_step_size = 1
+              + status                    = "ENABLED"
+              + target_capacity           = 1
+            }
+        }
+    }
+
+  # module.ecs.aws_ecs_cluster.main will be created
+  + resource "aws_ecs_cluster" "main" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + name     = "monolithic-ecs-cluster"
+      + region   = "us-east-1"
+      + tags     = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+
+      + configuration {
+          + execute_command_configuration {
+              + logging = "OVERRIDE"
+
+              + log_configuration {
+                  + cloud_watch_log_group_name = "/aws/ecs/monolithic"
+                }
+            }
+        }
+
+      + setting (known after apply)
+    }
+
+  # module.ecs.aws_ecs_cluster_capacity_providers.main will be created
+  + resource "aws_ecs_cluster_capacity_providers" "main" {
+      + capacity_providers = [
+          + "monolithic-provider",
+        ]
+      + cluster_name       = "monolithic-ecs-cluster"
+      + id                 = (known after apply)
+      + region             = "us-east-1"
+
+      + default_capacity_provider_strategy {
+          + base              = 1
+          + capacity_provider = "monolithic-provider"
+          + weight            = 100
+        }
+    }
+
+  # module.ecs.aws_ecs_service.backend will be created
+  + resource "aws_ecs_service" "backend" {
+      + arn                                = (known after apply)
+      + availability_zone_rebalancing      = (known after apply)
+      + cluster                            = (known after apply)
+      + deployment_maximum_percent         = 200
+      + deployment_minimum_healthy_percent = 100
+      + desired_count                      = 1
+      + enable_ecs_managed_tags            = false
+      + enable_execute_command             = false
+      + iam_role                           = (known after apply)
+      + id                                 = (known after apply)
+      + launch_type                        = "EC2"
+      + name                               = "backend"
+      + platform_version                   = (known after apply)
+      + region                             = "us-east-1"
+      + scheduling_strategy                = "REPLICA"
+      + tags_all                           = (known after apply)
+      + task_definition                    = (known after apply)
+      + triggers                           = (known after apply)
+      + wait_for_steady_state              = false
+
+      + deployment_configuration {
+          + bake_time_in_minutes = "30"
+          + strategy             = "BLUE_GREEN"
+
+          + canary_configuration (known after apply)
+
+          + linear_configuration (known after apply)
+        }
+
+      + load_balancer {
+          + container_name   = "backend"
+          + container_port   = 5000
+          + target_group_arn = (known after apply)
+            # (1 unchanged attribute hidden)
+
+          + advanced_configuration {
+              + alternate_target_group_arn = (known after apply)
+              + production_listener_rule   = (known after apply)
+              + role_arn                   = (known after apply)
+                # (1 unchanged attribute hidden)
+            }
+        }
+
+      + network_configuration {
+          + assign_public_ip = false
+          + security_groups  = [
+              + "sg-01a77e356f6187633",
+              + "sg-0aedd7ce43fa0bcd3",
+            ]
+          + subnets          = [
+              + "subnet-0682f1c8c493d85dd",
+              + "subnet-088e62754217e19f7",
+            ]
+        }
+    }
+
+  # module.ecs.aws_ecs_service.frontend will be created
+  + resource "aws_ecs_service" "frontend" {
+      + arn                                = (known after apply)
+      + availability_zone_rebalancing      = (known after apply)
+      + cluster                            = (known after apply)
+      + deployment_maximum_percent         = 200
+      + deployment_minimum_healthy_percent = 100
+      + desired_count                      = 1
+      + enable_ecs_managed_tags            = false
+      + enable_execute_command             = false
+      + iam_role                           = (known after apply)
+      + id                                 = (known after apply)
+      + launch_type                        = "EC2"
+      + name                               = "frontend"
+      + platform_version                   = (known after apply)
+      + region                             = "us-east-1"
+      + scheduling_strategy                = "REPLICA"
+      + tags_all                           = (known after apply)
+      + task_definition                    = (known after apply)
+      + triggers                           = (known after apply)
+      + wait_for_steady_state              = false
+
+      + deployment_configuration {
+          + bake_time_in_minutes = "30"
+          + strategy             = "BLUE_GREEN"
+
+          + canary_configuration (known after apply)
+
+          + linear_configuration (known after apply)
+        }
+
+      + load_balancer {
+          + container_name   = "frontend"
+          + container_port   = 80
+          + target_group_arn = (known after apply)
+            # (1 unchanged attribute hidden)
+
+          + advanced_configuration {
+              + alternate_target_group_arn = (known after apply)
+              + production_listener_rule   = (known after apply)
+              + role_arn                   = (known after apply)
+                # (1 unchanged attribute hidden)
+            }
+        }
+
+      + network_configuration {
+          + assign_public_ip = false
+          + security_groups  = [
+              + "sg-01a77e356f6187633",
+              + "sg-0aedd7ce43fa0bcd3",
+            ]
+          + subnets          = [
+              + "subnet-0682f1c8c493d85dd",
+              + "subnet-088e62754217e19f7",
+            ]
+        }
+    }
+
+  # module.ecs.aws_ecs_task_definition.backend will be created
+  + resource "aws_ecs_task_definition" "backend" {
+      + arn                      = (known after apply)
+      + arn_without_revision     = (known after apply)
+      + container_definitions    = jsonencode(
+            [
+              + {
+                  + environment      = []
+                  + essential        = true
+                  + healthCheck      = {
+                      + command     = [
+                          + "CMD-SHELL",
+                          + "wget -qO- http://localhost:8080/actuator/health/liveness || exit 1",
+                        ]
+                      + interval    = 30
+                      + retries     = 3
+                      + startPeriod = 120
+                      + timeout     = 5
+                    }
+                  + image            = "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest"
+                  + logConfiguration = {
+                      + logDriver = "awslogs"
+                      + options   = {
+                          + awslogs-create-group  = "true"
+                          + awslogs-group         = "/ecs/backend"
+                          + awslogs-region        = "us-east-1"
+                          + awslogs-stream-prefix = "ecs"
+                        }
+                    }
+                  + mountPoints      = []
+                  + name             = "backend"
+                  + portMappings     = [
+                      + {
+                          + appProtocol   = "http"
+                          + containerPort = 8080
+                          + hostPort      = 8080
+                          + protocol      = "tcp"
+                        },
+                    ]
+                  + volumesFrom      = []
+                },
+            ]
+        )
+      + cpu                      = "1024"
+      + enable_fault_injection   = (known after apply)
+      + family                   = "monolithic-backend"
+      + id                       = (known after apply)
+      + memory                   = "1024"
+      + network_mode             = "awsvpc"
+      + region                   = "us-east-1"
+      + requires_compatibilities = [
+          + "EC2",
+        ]
+      + revision                 = (known after apply)
+      + skip_destroy             = false
+      + tags_all                 = (known after apply)
+      + track_latest             = false
+
+      + runtime_platform {
+          + cpu_architecture        = "X86_64"
+          + operating_system_family = "LINUX"
+        }
+    }
+
+  # module.ecs.aws_ecs_task_definition.frontend will be created
+  + resource "aws_ecs_task_definition" "frontend" {
+      + arn                      = (known after apply)
+      + arn_without_revision     = (known after apply)
+      + container_definitions    = jsonencode(
+            [
+              + {
+                  + environment      = []
+                  + essential        = true
+                  + healthCheck      = {
+                      + command     = [
+                          + "CMD-SHELL",
+                          + "wget -qO- http://localhost/ || exit 1",
+                        ]
+                      + interval    = 30
+                      + retries     = 3
+                      + startPeriod = 120
+                      + timeout     = 5
+                    }
+                  + image            = "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest"
+                  + logConfiguration = {
+                      + logDriver = "awslogs"
+                      + options   = {
+                          + awslogs-create-group  = "true"
+                          + awslogs-group         = "/ecs/frontend"
+                          + awslogs-region        = "us-east-1"
+                          + awslogs-stream-prefix = "ecs"
+                        }
+                    }
+                  + mountPoints      = []
+                  + name             = "frontend"
+                  + portMappings     = [
+                      + {
+                          + appProtocol   = "http"
+                          + containerPort = 8080
+                          + hostPort      = 8080
+                          + protocol      = "tcp"
+                        },
+                    ]
+                  + volumesFrom      = []
+                },
+            ]
+        )
+      + cpu                      = "1024"
+      + enable_fault_injection   = (known after apply)
+      + family                   = "monolithic-frontend"
+      + id                       = (known after apply)
+      + memory                   = "1024"
+      + network_mode             = "awsvpc"
+      + region                   = "us-east-1"
+      + requires_compatibilities = [
+          + "EC2",
+        ]
+      + revision                 = (known after apply)
+      + skip_destroy             = false
+      + tags_all                 = (known after apply)
+      + track_latest             = false
+
+      + runtime_platform {
+          + cpu_architecture        = "X86_64"
+          + operating_system_family = "LINUX"
+        }
+    }
+
+  # module.instances.aws_db_instance.database_instance will be created
+  + resource "aws_db_instance" "database_instance" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = 7
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = (known after apply)
+      + db_subnet_group_name                  = "db_subnet_group"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + deletion_protection                   = false
+      + domain_fqdn                           = (known after apply)
+      + endpoint                              = (known after apply)
+      + engine                                = "mysql"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = "8.0"
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = "app-database"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t4g.small"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = false
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + region                                = "us-east-1"
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_encrypted                     = true
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = (known after apply)
+      + tags_all                              = (known after apply)
+      + timezone                              = (known after apply)
+      + upgrade_rollout_order                 = (known after apply)
+      + username                              = "admin"
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # module.instances.aws_iam_instance_profile.jenkins_profile will be created
+  + resource "aws_iam_instance_profile" "jenkins_profile" {
+      + arn         = (known after apply)
+      + create_date = (known after apply)
+      + id          = (known after apply)
+      + name        = "monolithic-jenkins-profile"
+      + name_prefix = (known after apply)
+      + path        = "/"
+      + role        = "monolithic-jenkins-role"
+      + tags_all    = (known after apply)
+      + unique_id   = (known after apply)
+    }
+
+  # module.instances.aws_iam_role.jenkins_role will be created
+  + resource "aws_iam_role" "jenkins_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ec2.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "monolithic-jenkins-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags                  = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + tags_all              = {
+          + "Environment" = "dev"
+          + "Project"     = "monolithic"
+        }
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.instances.aws_iam_role_policy.instance_policy will be created
+  + resource "aws_iam_role_policy" "instance_policy" {
+      + id          = (known after apply)
+      + name        = (known after apply)
+      + name_prefix = (known after apply)
+      + policy      = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ecr:BatchCheckLayerAvailability",
+                          + "ecr:GetDownloadUrlForLayer",
+                          + "ecr:BatchGetImage",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "arn:aws:ecr:us-east-1:852368830719:repository/monolithic/*"
+                      + Sid      = "ECRRepositoryAcceess"
+                    },
+                  + {
+                      + Action   = [
+                          + "ecr:GetAuthorizationToken",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                      + Sid      = "ECRGetAuthorizationToken"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role        = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy.jenkins_policy will be created
+  + resource "aws_iam_role_policy" "jenkins_policy" {
+      + id          = (known after apply)
+      + name        = "monolithic-jenkins-policy"
+      + name_prefix = (known after apply)
+      + policy      = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action   = [
+                          + "ecr:GetAuthorizationToken",
+                          + "ecr:BatchCheckLayerAvailability",
+                          + "ecr:GetDownloadUrlForLayer",
+                          + "ecr:BatchGetImage",
+                          + "ecr:PutImage",
+                          + "ecr:InitiateLayerUpload",
+                          + "ecr:UploadLayerPart",
+                          + "ecr:CompleteLayerUpload",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                  + {
+                      + Action   = [
+                          + "ssm:SendCommand",
+                          + "ssm:GetCommandInvocation",
+                          + "ssm:ListCommandInvocations",
+                          + "ssm:DescribeInstanceInformation",
+                        ]
+                      + Effect   = "Allow"
+                      + Resource = "*"
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + role        = (known after apply)
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.cloudwatch_agent_server_policy will be created
+  + resource "aws_iam_role_policy_attachment" "cloudwatch_agent_server_policy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ec2_role will be created
+  + resource "aws_iam_role_policy_attachment" "ec2_role" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceforEC2Role"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ecs_role will be created
+  + resource "aws_iam_role_policy_attachment" "ecs_role" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceRole"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ssm_managed_instance_core will be created
+  + resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ssm_role will be created
+  + resource "aws_iam_role_policy_attachment" "ssm_role" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2RoleforSSM"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_instance.jenkins will be created
+  + resource "aws_instance" "jenkins" {
+      + ami                                  = "ami-0992dd78fde27ac81"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = true
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + force_destroy                        = false
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "monolithic-jenkins-profile"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.medium"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_group_id                   = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-jenkins"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-jenkins"
+          + "Project"     = "monolithic"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = <<-EOT
+            #!/bin/bash
+            set -e
+            exec > /var/log/user_data.log 2>&1
+            
+            # sudo yum update -y
+            # sudo yum install -y docker
+            # sudo systemctl start docker
+            # sudo systemctl enable docker
+            
+            sudo docker run --name jenkins-master -d --restart=on-failure \
+              -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock \
+              -v jenkins_home:/var/jenkins_home --user root jenkins/jenkins:lts-alpine
+            
+            sudo docker exec jenkins-master apk add --no-cache curl unzip docker-cli aws-cli
+            
+            sudo docker exec jenkins-master jenkins-plugin-cli --plugins "json-path-api blueocean docker-workflow aws-credentials pipeline-aws"
+            
+            echo "Jenkins setup done!"
+        EOT
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + primary_network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 20
+          + volume_type           = "gp3"
+        }
+
+      + secondary_network_interface (known after apply)
+    }
+
+  # module.networks.aws_db_subnet_group.db_subnet_group will be created
+  + resource "aws_db_subnet_group" "db_subnet_group" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "db_subnet_group"
+      + name_prefix             = (known after apply)
+      + region                  = "us-east-1"
+      + subnet_ids              = (known after apply)
+      + supported_network_types = (known after apply)
+      + tags_all                = (known after apply)
+      + vpc_id                  = (known after apply)
+    }
+
+  # module.networks.aws_eip.eip will be created
+  + resource "aws_eip" "eip" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + region               = "us-east-1"
+      + tags                 = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-eip"
+          + "Project"     = "monolithic"
+        }
+      + tags_all             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-eip"
+          + "Project"     = "monolithic"
+        }
+    }
+
+  # module.networks.aws_internet_gateway.app_igw will be created
+  + resource "aws_internet_gateway" "app_igw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-1"
+      + tags     = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-internet-gateway"
+          + "Project"     = "monolithic"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-internet-gateway"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id   = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_internet_gateway.cicd_igw will be created
+  + resource "aws_internet_gateway" "cicd_igw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-1"
+      + tags     = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-igw"
+          + "Project"     = "monolithic"
+        }
+      + tags_all = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-igw"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+  # module.networks.aws_nat_gateway.app_nat_gateway will be created
+  + resource "aws_nat_gateway" "app_nat_gateway" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + auto_provision_zones               = (known after apply)
+      + auto_scaling_ips                   = (known after apply)
+      + availability_mode                  = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + region                             = "us-east-1"
+      + regional_nat_gateway_address       = (known after apply)
+      + regional_nat_gateway_auto_mode     = (known after apply)
+      + route_table_id                     = (known after apply)
+      + secondary_allocation_ids           = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-nat-gateway"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-nat-gateway"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                             = (known after apply)
+    }
+
+  # module.networks.aws_route_table.app_public_route_table will be created
+  + resource "aws_route_table" "app_public_route_table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-1"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-route-table"
+          + "Project"     = "monolithic"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-route-table"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id           = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_route_table.cicd_public_route_table will be created
+  + resource "aws_route_table" "cicd_public_route_table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-1"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-public-rt"
+          + "Project"     = "monolithic"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-public-rt"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+  # module.networks.aws_route_table.private_route_table will be created
+  + resource "aws_route_table" "private_route_table" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-1"
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + nat_gateway_id             = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-route-table"
+          + "Project"     = "monolithic"
+        }
+      + tags_all         = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-route-table"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id           = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_route_table_association.cicd_public_route_table_association will be created
+  + resource "aws_route_table_association" "cicd_public_route_table_association" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.networks.aws_route_table_association.private_route_table_association_1 will be created
+  + resource "aws_route_table_association" "private_route_table_association_1" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = "subnet-088e62754217e19f7"
+    }
+
+  # module.networks.aws_route_table_association.private_route_table_association_2 will be created
+  + resource "aws_route_table_association" "private_route_table_association_2" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = "subnet-0682f1c8c493d85dd"
+    }
+
+  # module.networks.aws_route_table_association.public_route_table_association will be created
+  + resource "aws_route_table_association" "public_route_table_association" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.networks.aws_route_table_association.public_route_table_association_2 will be created
+  + resource "aws_route_table_association" "public_route_table_association_2" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.networks.aws_security_group.database_security_group will be created
+  + resource "aws_security_group" "database_security_group" {
+      + arn                    = (known after apply)
+      + description            = "Security group for database"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "monolithic-database-security-group"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-1"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-database-security-group"
+          + "Project"     = "monolithic"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-database-security-group"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                 = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_security_group.imagebuilder_security_group will be created
+  + resource "aws_security_group" "imagebuilder_security_group" {
+      + arn                    = (known after apply)
+      + description            = "Security group for image builder"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "monolithic-imagebuilder-security-group"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-1"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-imagebuilder-security-group"
+          + "Project"     = "monolithic"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-imagebuilder-security-group"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                 = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_security_group.jenkins_security_group will be created
+  + resource "aws_security_group" "jenkins_security_group" {
+      + arn                    = (known after apply)
+      + description            = "Managed by Terraform"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "jenkins-security-group"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-1"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-jenkins-security-group"
+          + "Project"     = "monolithic"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-jenkins-security-group"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+  # module.networks.aws_security_group.loadbalancer_security_group will be created
+  + resource "aws_security_group" "loadbalancer_security_group" {
+      + arn                    = (known after apply)
+      + description            = "Security group for the load balancer"
+      + egress                 = (known after apply)
+      + id                     = (known after apply)
+      + ingress                = (known after apply)
+      + name                   = "monolithic-loadbalancer-security-group"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + region                 = "us-east-1"
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-loadbalancer-security-group"
+          + "Project"     = "monolithic"
+        }
+      + tags_all               = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-loadbalancer-security-group"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                 = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_subnet.private_subnet_app_3 will be created
+  + resource "aws_subnet" "private_subnet_app_3" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "20.0.5.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-subnet-app-3"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-subnet-app-3"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                         = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_subnet.private_subnet_app_4 will be created
+  + resource "aws_subnet" "private_subnet_app_4" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "20.0.6.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-subnet-app-4"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-private-subnet-app-4"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                         = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_subnet.public_subnet_app_1 will be created
+  + resource "aws_subnet" "public_subnet_app_1" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "20.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-app"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-app"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                         = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_subnet.public_subnet_app_2 will be created
+  + resource "aws_subnet" "public_subnet_app_2" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1b"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "20.0.2.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-app-2"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-app-2"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                         = "vpc-0c3c4eb476d89b420"
+    }
+
+  # module.networks.aws_subnet.public_subnet_cicd will be created
+  + resource "aws_subnet" "public_subnet_cicd" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "20.1.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block                                = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags                                           = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-cicd"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                                       = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-public-subnet-cicd"
+          + "Project"     = "monolithic"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+  # module.networks.aws_vpc.cicd_vpc will be created
+  + resource "aws_vpc" "cicd_vpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "20.1.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = (known after apply)
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "us-east-1"
+      + tags                                 = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-vpc"
+          + "Project"     = "monolithic"
+        }
+      + tags_all                             = {
+          + "Environment" = "dev"
+          + "Name"        = "monolithic-cicd-vpc"
+          + "Project"     = "monolithic"
+        }
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.backend_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "backend_security_group_egress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "us-east-1"
+      + security_group_id      = "sg-01a77e356f6187633"
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.database_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "database_security_group_egress_rule" {
+      + arn                          = (known after apply)
+      + id                           = (known after apply)
+      + ip_protocol                  = "-1"
+      + referenced_security_group_id = "sg-01a77e356f6187633"
+      + region                       = "us-east-1"
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {}
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.frontend_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "frontend_security_group_egress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "us-east-1"
+      + security_group_id      = "sg-0aedd7ce43fa0bcd3"
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.imagebuilder_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "imagebuilder_security_group_egress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.jenkins_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "jenkins_security_group_egress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.networks.aws_vpc_security_group_egress_rule.loadbalancer_security_group_egress_rule will be created
+  + resource "aws_vpc_security_group_egress_rule" "loadbalancer_security_group_egress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + id                     = (known after apply)
+      + ip_protocol            = "-1"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.backend_security_group_ingress_rule will be created
+  + resource "aws_vpc_security_group_ingress_rule" "backend_security_group_ingress_rule" {
+      + arn                          = (known after apply)
+      + from_port                    = 5000
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + region                       = "us-east-1"
+      + security_group_id            = "sg-01a77e356f6187633"
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {}
+      + to_port                      = 5000
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.database_security_group_ingress_rule will be created
+  + resource "aws_vpc_security_group_ingress_rule" "database_security_group_ingress_rule" {
+      + arn                          = (known after apply)
+      + from_port                    = 3306
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = "sg-01a77e356f6187633"
+      + region                       = "us-east-1"
+      + security_group_id            = (known after apply)
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {}
+      + to_port                      = 3306
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.frontend_security_group_ingress_rule will be created
+  + resource "aws_vpc_security_group_ingress_rule" "frontend_security_group_ingress_rule" {
+      + arn                          = (known after apply)
+      + from_port                    = 80
+      + id                           = (known after apply)
+      + ip_protocol                  = "tcp"
+      + referenced_security_group_id = (known after apply)
+      + region                       = "us-east-1"
+      + security_group_id            = "sg-0aedd7ce43fa0bcd3"
+      + security_group_rule_id       = (known after apply)
+      + tags_all                     = {}
+      + to_port                      = 80
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.jenkins_security_group_ingress_ssh will be created
+  + resource "aws_vpc_security_group_ingress_rule" "jenkins_security_group_ingress_ssh" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = 22
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 22
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.jenkins_security_group_ingress_ui will be created
+  + resource "aws_vpc_security_group_ingress_rule" "jenkins_security_group_ingress_ui" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = 8080
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 8080
+    }
+
+  # module.networks.aws_vpc_security_group_ingress_rule.loadbalancer_security_group_ingress_rule will be created
+  + resource "aws_vpc_security_group_ingress_rule" "loadbalancer_security_group_ingress_rule" {
+      + arn                    = (known after apply)
+      + cidr_ipv4              = "0.0.0.0/0"
+      + from_port              = 80
+      + id                     = (known after apply)
+      + ip_protocol            = "tcp"
+      + region                 = "us-east-1"
+      + security_group_id      = (known after apply)
+      + security_group_rule_id = (known after apply)
+      + tags_all               = {}
+      + to_port                = 80
+    }
+
+Plan: 69 to add, 1 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

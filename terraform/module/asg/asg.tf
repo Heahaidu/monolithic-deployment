@@ -187,7 +187,7 @@ resource "aws_autoscaling_group" "ecs" {
 
   desired_capacity = var.desired_capacity
 
-  protect_from_scale_in = true
+  protect_from_scale_in = false
 
   launch_template {
     id = var.launch_template_id

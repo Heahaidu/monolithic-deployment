@@ -2,7 +2,7 @@
 
 resource "aws_launch_template" "launch_template" {
   name          = "${var.project_name}-ecs-launch-template"
-  image_id      = var.ami_id
+  image_id      = var.ecs_ami_id
   instance_type = var.instance_type
 
   iam_instance_profile {
@@ -15,7 +15,9 @@ resource "aws_launch_template" "launch_template" {
     associate_public_ip_address = false
   }
 
-  user_data = base64encode(templatefile("${path.module}/scripts/launch-template.sh"))
+  user_data = base64encode(templatefile("${path.module}/scripts/launch-template.sh", {
+    ecs_cluster_name = var.ecs_cluster_name
+  }))
 
   block_device_mappings {
     device_name = "/dev/xvda"

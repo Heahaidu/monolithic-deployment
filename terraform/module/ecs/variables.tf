@@ -32,14 +32,23 @@ variable "alb_role_arn" {
 
 variable "frontend_target_group_arns" {
   type = object({
-    blue = string
+    blue  = string
     green = string
   })
 }
 
 variable "backend_target_group_arns" {
   type = object({
-    blue = string
+    blue  = string
     green = string
   })
+}
+
+variable "ecs_cluster_name" {
+  type = string
+}
+
+variable "auto_scale_cpu_target" {
+  type    = number
+  default = 70
 }

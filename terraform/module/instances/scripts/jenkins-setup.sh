@@ -15,4 +15,6 @@ sudo docker exec jenkins-master apk add --no-cache curl unzip docker-cli aws-cli
 
 sudo docker exec jenkins-master jenkins-plugin-cli --plugins "json-path-api blueocean docker-workflow aws-credentials pipeline-aws"
 
+sudo docker restart jenkins-master
+
 echo "Jenkins setup done!"

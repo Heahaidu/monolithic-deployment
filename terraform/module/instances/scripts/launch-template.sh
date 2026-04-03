@@ -1,4 +1,4 @@
 #! /bin/bash
 
-sudo echo "ECS_CLUSTER=${ecs_cluster}" >> /etc/ecs/ecs.config
-sudo start ecs
+sudo echo "ECS_CLUSTER=${ecs_cluster_name}" >> /etc/ecs/ecs.config
+sudo systemctl start ecs

@@ -9,3 +9,9 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "ecs_ami_id" {
+  description = "The AMI ID for the ECS instance"
+  type        = string
+  default     = "ami-0ca63348a6bc46da3"
+}

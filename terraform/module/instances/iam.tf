@@ -78,7 +78,7 @@ resource "aws_iam_role" "instance_role" {
 
 }
 
-resource "aws_iam_role_policy" "instance_ecr" {
+resource "aws_iam_role_policy" "instance_policy" {
   role = aws_iam_role.instance_role.name
 
   policy = jsonencode({
@@ -106,12 +106,25 @@ resource "aws_iam_role_policy" "instance_ecr" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "instance_ssm" {
+resource "aws_iam_role_policy_attachment" "ec2_role" { 
+  role = aws_iam_role.instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_role" { 
+  role = aws_iam_role.instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" { 
   role = aws_iam_role.instance_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent_server_policy" { 
+  role = aws_iam_role.instance_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
 
 resource "aws_iam_instance_profile" "instance_profile" {
   name = "${var.project_name}-instance-profile"

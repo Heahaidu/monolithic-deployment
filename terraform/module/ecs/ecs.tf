@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "main" {
-  name = local.ecs_name
+  name = var.ecs_cluster_name
 
   configuration {
     execute_command_configuration {
@@ -25,13 +25,13 @@ resource "aws_ecs_capacity_provider" "main" {
 
   auto_scaling_group_provider {
     auto_scaling_group_arn         = var.ecs_asg_arn
-    managed_termination_protection = "ENABLE"
+    managed_termination_protection = "DISABLED"
 
     managed_scaling {
-      status                    = "ENABLE"
-      target_capacity           = 40
+      status                    = "DISABLED"
+      target_capacity           = 90  
       minimum_scaling_step_size = 1
-      maximum_scaling_step_size = 1000
+      maximum_scaling_step_size = 2
     }
   }
 
@@ -40,7 +40,7 @@ resource "aws_ecs_capacity_provider" "main" {
 }
 
 resource "aws_ecs_cluster_capacity_providers" "main" {
-  cluster_name = aws_ecs_cluster.ecs.name
+  cluster_name = aws_ecs_cluster.main.name
 
   capacity_providers = [aws_ecs_capacity_provider.main.name]
 

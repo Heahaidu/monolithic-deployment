@@ -1,5 +1,5 @@
 resource "aws_lb_target_group" "frontend_target_group_blue" {
-  name        = local.target_group_frontend
+  name        = local.frontend_target_group_blue_name
   vpc_id      = var.app_vpc_id
   target_type = "ip"
   port        = 80
@@ -21,7 +21,7 @@ resource "aws_lb_target_group" "frontend_target_group_blue" {
 }
 
 resource "aws_lb_target_group" "frontend_target_group_green" {
-  name        = local.target_group_frontend
+  name        = local.frontend_target_group_green_name
   vpc_id      = var.app_vpc_id
   target_type = "ip"
   port        = 80
@@ -46,7 +46,7 @@ resource "aws_lb_target_group" "frontend_target_group_green" {
 # ------------------ #
 
 resource "aws_lb_target_group" "backend_target_group_blue" {
-  name        = local.target_group_backend
+  name        = local.backend_target_group_blue_name
   vpc_id      = var.app_vpc_id
   target_type = "ip"
   port        = 5000
@@ -68,7 +68,7 @@ resource "aws_lb_target_group" "backend_target_group_blue" {
 }
 
 resource "aws_lb_target_group" "backend_target_group_green" {
-  name        = local.target_group_backend
+  name        = local.backend_target_group_green_name
   vpc_id      = var.app_vpc_id
   target_type = "ip"
   port        = 5000

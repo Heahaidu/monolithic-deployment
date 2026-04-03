@@ -4,7 +4,6 @@ resource "aws_instance" "jenkins" {
   subnet_id                   = element(var.cicd_subnet_ids[*], 0)
   vpc_security_group_ids      = var.jenkins_security_group_ids
   iam_instance_profile        = aws_iam_instance_profile.jenkins_profile.name
-  key_name                    = "${local.project_name}-jenkins"
   associate_public_ip_address = true
 
   root_block_device {
@@ -12,7 +11,7 @@ resource "aws_instance" "jenkins" {
     volume_type = "gp3"
   }
 
-  user_data = file("${path.module}/user_data/jenkins-setup.sh")
+  user_data = file("${path.module}/scripts/jenkins-setup.sh")
 
   tags = {
     Project     = local.project_name

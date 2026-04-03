@@ -65,3 +65,11 @@ variable "database_security_group_ids" {
 variable "db_subnet_group_name" {
   type = string
 }
+
+variable "ecs_cluster_name" {
+  type = string
+}
+
+variable "ecs_ami_id" {
+  type = string
+}

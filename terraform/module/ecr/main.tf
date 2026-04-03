@@ -39,7 +39,7 @@ resource "aws_ecr_repository" "backend" {
 }
 
 resource "aws_ecr_lifecycle_policy" "backend" {
-  repository = aws_ecr_repository.backend
+  repository = aws_ecr_repository.backend.name
   policy = jsonencode({
     rules = [{
       rulePriority = 1

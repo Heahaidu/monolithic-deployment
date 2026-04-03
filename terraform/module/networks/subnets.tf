@@ -5,6 +5,7 @@
 resource "aws_subnet" "public_subnet_cicd" {
   vpc_id                  = aws_vpc.cicd_vpc.id
   cidr_block              = var.cicd_network.public_subnet_1_cidr
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
   tags = {
     Project     = local.project_name
