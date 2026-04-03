@@ -15,8 +15,8 @@ pipeline {
 
     parameters {
         string(
-            name: 'PROJECT_NAME'
-            defaultValue: 'monolithic-deployment'
+            name: 'PROJECT_NAME',
+            defaultValue: 'monolithic-deployment',
             description: 'Name of the project equal to the project_name variable in terraform'
         )
         string(
