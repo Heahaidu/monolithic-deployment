@@ -28,7 +28,7 @@ pipeline {
                             returnStdout: true
                         ).trim()
 
-                        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazon.com"
+                        ECR_REGISTRY = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
                         ECR_REPO = "${ECR_REGISTRY}/${PROJECT_NAME}/frontend"
                     }
                     dir('app/frontend') {
