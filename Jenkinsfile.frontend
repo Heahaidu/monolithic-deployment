@@ -5,31 +5,18 @@ pipeline {
         PROJECT_NAME    = "monolithic-deployment"
 
         AWS_REGION      = "us-east-1"
-        // AWS_ACCOUNT_ID  = sh(script: "aws sts get-caller-identity --query Account --output text", returnStdout: true).trim()
-        // ECR_REGISTRY    = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        // ECR_REPO        = "${ECR_REGISTRY}/${PROJECT_NAME}/frontend"
         IMAGE_TAG       = "${BUILD_NUMBER}"
         ECS_CLUSTER     = "monolithic-ecs-cluster"
         ECS_SERVICE     = "frontend-service"
     }
 
-    parameters {
-        string(
-            name: 'PROJECT_NAME',
-            defaultValue: 'monolithic-deployment',
-            description: 'Name of the project equal to the project_name variable in terraform'
-        )
-        string(
-            name: 'GIT_BRANCH',
-            defaultValue: 'main',
-            description: 'Branch to build Frontend'
-        )
-        string(
-            name: 'FRONTEND_INSTANCE_ID',
-            defaultValue: 'i-xxxxxxxxxxxxxxxxx',
-            description: 'EC2 Instance ID for Frontend'
-        )
-    }
+    // parameters {
+    //     string(
+    //         name: '',
+    //         defaultValue: '',
+    //         description: ''
+    //     )
+    // }
 
     stages {
         stage('Build Docker Image') {
