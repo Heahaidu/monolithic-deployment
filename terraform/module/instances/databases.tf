@@ -1,4 +1,5 @@
 resource "aws_db_instance" "database_instance" {
+  db_name                 = "fcjresbar"
   identifier              = local.database_name
   instance_class          = var.db_instance_class
   engine                  = "mysql"

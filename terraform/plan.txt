@@ -1,6 +1,8 @@
-module.instances.data.aws_caller_identity.current: Reading...
 data.aws_caller_identity.current: Reading...
-module.instances.data.aws_caller_identity.current: Read complete after 1s [id=852368830719]
+module.instances.data.aws_caller_identity.current: Reading...
+module.ecs.data.aws_caller_identity.current: Reading...
+module.instances.data.aws_caller_identity.current: Read complete after 0s [id=852368830719]
+module.ecs.data.aws_caller_identity.current: Read complete after 1s [id=852368830719]
 data.aws_caller_identity.current: Read complete after 1s [id=852368830719]
 
 Terraform used the selected providers to generate the following execution
@@ -9,48 +11,8 @@ plan. Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-  # module.alb.aws_alb_listener.backend_lb_listener will be created
-  + resource "aws_alb_listener" "backend_lb_listener" {
-      + arn                                                                   = (known after apply)
-      + id                                                                    = (known after apply)
-      + load_balancer_arn                                                     = (known after apply)
-      + port                                                                  = 5000
-      + protocol                                                              = "HTTP"
-      + region                                                                = "us-east-1"
-      + routing_http_request_x_amzn_mtls_clientcert_header_name               = (known after apply)
-      + routing_http_request_x_amzn_mtls_clientcert_issuer_header_name        = (known after apply)
-      + routing_http_request_x_amzn_mtls_clientcert_leaf_header_name          = (known after apply)
-      + routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name = (known after apply)
-      + routing_http_request_x_amzn_mtls_clientcert_subject_header_name       = (known after apply)
-      + routing_http_request_x_amzn_mtls_clientcert_validity_header_name      = (known after apply)
-      + routing_http_request_x_amzn_tls_cipher_suite_header_name              = (known after apply)
-      + routing_http_request_x_amzn_tls_version_header_name                   = (known after apply)
-      + routing_http_response_access_control_allow_credentials_header_value   = (known after apply)
-      + routing_http_response_access_control_allow_headers_header_value       = (known after apply)
-      + routing_http_response_access_control_allow_methods_header_value       = (known after apply)
-      + routing_http_response_access_control_allow_origin_header_value        = (known after apply)
-      + routing_http_response_access_control_expose_headers_header_value      = (known after apply)
-      + routing_http_response_access_control_max_age_header_value             = (known after apply)
-      + routing_http_response_content_security_policy_header_value            = (known after apply)
-      + routing_http_response_server_enabled                                  = (known after apply)
-      + routing_http_response_strict_transport_security_header_value          = (known after apply)
-      + routing_http_response_x_content_type_options_header_value             = (known after apply)
-      + routing_http_response_x_frame_options_header_value                    = (known after apply)
-      + ssl_policy                                                            = (known after apply)
-      + tags_all                                                              = (known after apply)
-      + tcp_idle_timeout_seconds                                              = (known after apply)
-
-      + default_action {
-          + order            = (known after apply)
-          + target_group_arn = (known after apply)
-          + type             = "forward"
-        }
-
-      + mutual_authentication (known after apply)
-    }
-
-  # module.alb.aws_alb_listener.frontend_lb_listener will be created
-  + resource "aws_alb_listener" "frontend_lb_listener" {
+  # module.alb.aws_alb_listener.app_lb_listener will be created
+  + resource "aws_alb_listener" "app_lb_listener" {
       + arn                                                                   = (known after apply)
       + id                                                                    = (known after apply)
       + load_balancer_arn                                                     = (known after apply)
@@ -81,9 +43,14 @@ Terraform will perform the following actions:
       + tcp_idle_timeout_seconds                                              = (known after apply)
 
       + default_action {
-          + order            = (known after apply)
-          + target_group_arn = (known after apply)
-          + type             = "forward"
+          + order = (known after apply)
+          + type  = "fixed-response"
+
+          + fixed_response {
+              + content_type = "text/plain"
+              + message_body = "Not Found"
+              + status_code  = "404"
+            }
         }
 
       + mutual_authentication (known after apply)
@@ -99,7 +66,7 @@ Terraform will perform the following actions:
                       + Action    = "sts:AssumeRole"
                       + Effect    = "Allow"
                       + Principal = {
-                          + Service = "ec2.amazonaws.com"
+                          + Service = "ecs.amazonaws.com"
                         }
                     },
                 ]
@@ -529,7 +496,7 @@ Terraform will perform the following actions:
       + name                             = "monolithic-ecs-asg"
       + name_prefix                      = (known after apply)
       + predicted_capacity               = (known after apply)
-      + protect_from_scale_in            = true
+      + protect_from_scale_in            = false
       + region                           = "us-east-1"
       + service_linked_role_arn          = (known after apply)
       + target_group_arns                = (known after apply)
@@ -658,6 +625,86 @@ Terraform will perform the following actions:
         }
     }
 
+  # module.ecs.aws_appautoscaling_policy.ecs_policy_backend will be created
+  + resource "aws_appautoscaling_policy" "ecs_policy_backend" {
+      + alarm_arns         = (known after apply)
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + name               = "backend-scale-cpu"
+      + policy_type        = "TargetTrackingScaling"
+      + region             = "us-east-1"
+      + resource_id        = "service/monolithic-ecs-cluster/backend"
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+
+      + target_tracking_scaling_policy_configuration {
+          + disable_scale_in   = false
+          + scale_in_cooldown  = 180
+          + scale_out_cooldown = 180
+          + target_value       = 70
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ECSServiceAverageCPUUtilization"
+            }
+        }
+    }
+
+  # module.ecs.aws_appautoscaling_policy.ecs_policy_frontend will be created
+  + resource "aws_appautoscaling_policy" "ecs_policy_frontend" {
+      + alarm_arns         = (known after apply)
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + name               = "frontend-scale-cpu"
+      + policy_type        = "TargetTrackingScaling"
+      + region             = "us-east-1"
+      + resource_id        = "service/monolithic-ecs-cluster/frontend"
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+
+      + target_tracking_scaling_policy_configuration {
+          + disable_scale_in   = false
+          + scale_in_cooldown  = 180
+          + scale_out_cooldown = 180
+          + target_value       = 70
+
+          + predefined_metric_specification {
+              + predefined_metric_type = "ECSServiceAverageCPUUtilization"
+            }
+        }
+    }
+
+  # module.ecs.aws_appautoscaling_target.ecs_target_backend will be created
+  + resource "aws_appautoscaling_target" "ecs_target_backend" {
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + max_capacity       = 4
+      + min_capacity       = 1
+      + region             = "us-east-1"
+      + resource_id        = "service/monolithic-ecs-cluster/backend"
+      + role_arn           = (known after apply)
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+      + tags_all           = (known after apply)
+
+      + suspended_state (known after apply)
+    }
+
+  # module.ecs.aws_appautoscaling_target.ecs_target_frontend will be created
+  + resource "aws_appautoscaling_target" "ecs_target_frontend" {
+      + arn                = (known after apply)
+      + id                 = (known after apply)
+      + max_capacity       = 4
+      + min_capacity       = 1
+      + region             = "us-east-1"
+      + resource_id        = "service/monolithic-ecs-cluster/frontend"
+      + role_arn           = (known after apply)
+      + scalable_dimension = "ecs:service:DesiredCount"
+      + service_namespace  = "ecs"
+      + tags_all           = (known after apply)
+
+      + suspended_state (known after apply)
+    }
+
   # module.ecs.aws_cloudwatch_log_group.main will be created
   + resource "aws_cloudwatch_log_group" "main" {
       + arn                         = (known after apply)
@@ -697,14 +744,14 @@ Terraform will perform the following actions:
       + auto_scaling_group_provider {
           + auto_scaling_group_arn         = (known after apply)
           + managed_draining               = (known after apply)
-          + managed_termination_protection = "ENABLED"
+          + managed_termination_protection = "DISABLED"
 
           + managed_scaling {
               + instance_warmup_period    = (known after apply)
-              + maximum_scaling_step_size = 1000
+              + maximum_scaling_step_size = 2
               + minimum_scaling_step_size = 1
-              + status                    = "ENABLED"
-              + target_capacity           = 1
+              + status                    = "DISABLED"
+              + target_capacity           = 90
             }
         }
     }
@@ -861,45 +908,7 @@ Terraform will perform the following actions:
   + resource "aws_ecs_task_definition" "backend" {
       + arn                      = (known after apply)
       + arn_without_revision     = (known after apply)
-      + container_definitions    = jsonencode(
-            [
-              + {
-                  + environment      = []
-                  + essential        = true
-                  + healthCheck      = {
-                      + command     = [
-                          + "CMD-SHELL",
-                          + "wget -qO- http://localhost:8080/actuator/health/liveness || exit 1",
-                        ]
-                      + interval    = 30
-                      + retries     = 3
-                      + startPeriod = 120
-                      + timeout     = 5
-                    }
-                  + image            = "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest"
-                  + logConfiguration = {
-                      + logDriver = "awslogs"
-                      + options   = {
-                          + awslogs-create-group  = "true"
-                          + awslogs-group         = "/ecs/backend"
-                          + awslogs-region        = "us-east-1"
-                          + awslogs-stream-prefix = "ecs"
-                        }
-                    }
-                  + mountPoints      = []
-                  + name             = "backend"
-                  + portMappings     = [
-                      + {
-                          + appProtocol   = "http"
-                          + containerPort = 8080
-                          + hostPort      = 8080
-                          + protocol      = "tcp"
-                        },
-                    ]
-                  + volumesFrom      = []
-                },
-            ]
-        )
+      + container_definitions    = (sensitive value)
       + cpu                      = "1024"
       + enable_fault_injection   = (known after apply)
       + family                   = "monolithic-backend"
@@ -940,7 +949,7 @@ Terraform will perform the following actions:
                       + startPeriod = 120
                       + timeout     = 5
                     }
-                  + image            = "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest"
+                  + image            = "852368830719.dkr.ecr.us-east-1.amazonaws.com/monolithic/frontend:latest"
                   + logConfiguration = {
                       + logDriver = "awslogs"
                       + options   = {
@@ -955,8 +964,8 @@ Terraform will perform the following actions:
                   + portMappings     = [
                       + {
                           + appProtocol   = "http"
-                          + containerPort = 8080
-                          + hostPort      = 8080
+                          + containerPort = 80
+                          + hostPort      = 80
                           + protocol      = "tcp"
                         },
                     ]
@@ -983,6 +992,44 @@ Terraform will perform the following actions:
           + cpu_architecture        = "X86_64"
           + operating_system_family = "LINUX"
         }
+    }
+
+  # module.ecs.aws_iam_role.auto_scaling_role will be created
+  + resource "aws_iam_role" "auto_scaling_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "application-autoscaling.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "auto_scaling_role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # module.ecs.aws_iam_role_policy_attachment.auto_scaling_role_policy will be created
+  + resource "aws_iam_role_policy_attachment" "auto_scaling_role_policy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
+      + role       = "auto_scaling_role"
     }
 
   # module.instances.aws_db_instance.database_instance will be created
@@ -1157,8 +1204,8 @@ Terraform will perform the following actions:
       + inline_policy (known after apply)
     }
 
-  # module.instances.aws_iam_role_policy.instance_ecr will be created
-  + resource "aws_iam_role_policy" "instance_ecr" {
+  # module.instances.aws_iam_role_policy.instance_policy will be created
+  + resource "aws_iam_role_policy" "instance_policy" {
       + id          = (known after apply)
       + name        = (known after apply)
       + name_prefix = (known after apply)
@@ -1229,8 +1276,29 @@ Terraform will perform the following actions:
       + role        = (known after apply)
     }
 
-  # module.instances.aws_iam_role_policy_attachment.instance_ssm will be created
-  + resource "aws_iam_role_policy_attachment" "instance_ssm" {
+  # module.instances.aws_iam_role_policy_attachment.cloudwatch_agent_server_policy will be created
+  + resource "aws_iam_role_policy_attachment" "cloudwatch_agent_server_policy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ec2_role will be created
+  + resource "aws_iam_role_policy_attachment" "ec2_role" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ecs_role will be created
+  + resource "aws_iam_role_policy_attachment" "ecs_role" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+      + role       = "monolithic-instance-role"
+    }
+
+  # module.instances.aws_iam_role_policy_attachment.ssm_managed_instance_core will be created
+  + resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
       + id         = (known after apply)
       + policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       + role       = "monolithic-instance-role"
@@ -1301,9 +1369,11 @@ Terraform will perform the following actions:
               -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock \
               -v jenkins_home:/var/jenkins_home --user root jenkins/jenkins:lts-alpine
             
-            sudo docker exec jenkins-master apk add --no-cache curl unzip docker-cli aws-cli
+            sudo docker exec jenkins-master apk add --no-cache curl unzip docker-cli aws-cli jq
             
             sudo docker exec jenkins-master jenkins-plugin-cli --plugins "json-path-api blueocean docker-workflow aws-credentials pipeline-aws"
+            
+            sudo docker restart jenkins-master
             
             echo "Jenkins setup done!"
         EOT
@@ -1354,7 +1424,7 @@ Terraform will perform the following actions:
       + arn             = (known after apply)
       + default_version = (known after apply)
       + id              = (known after apply)
-      + image_id        = "ami-0992dd78fde27ac81"
+      + image_id        = "ami-0ca63348a6bc46da3"
       + instance_type   = "t3.medium"
       + latest_version  = (known after apply)
       + name            = "monolithic-ecs-launch-template"
@@ -2213,7 +2283,7 @@ Terraform will perform the following actions:
       + to_port                = 80
     }
 
-Plan: 74 to add, 0 to change, 0 to destroy.
+Plan: 82 to add, 0 to change, 0 to destroy.
 
 ─────────────────────────────────────────────────────────────────────────────
 

@@ -56,3 +56,25 @@ variable "auto_scale_cpu_target" {
   type    = number
   default = 70
 }
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+  sensitive = true
+}
+
+variable "database" {
+  type = string
+}
+
+variable "db_endpoint" {
+  type = string
+}
+
+variable "jwt_secret" {
+  type = string
+  sensitive = true
+}

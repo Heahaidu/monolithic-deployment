@@ -12,7 +12,7 @@
         }
       ],
       "essential": true,
-      "environment": [],
+      "environment": ${env},
       "mountPoints": [],
       "volumesFrom": [],
       "logConfiguration": {

@@ -11,6 +11,7 @@ module "instances" {
   environment  = local.environment
   region       = var.region
 
+  db_username = var.db_username
   db_password = var.db_password
 
   cicd_subnet_ids = module.networks.cicd_subnet_ids
@@ -92,6 +93,15 @@ module "ecs" {
 
   ecs_cluster_name = local.ecs_cluster_name
 
+  db_username = var.db_username
+
+  db_password = var.db_password
+
+  database = var.database
+
+  db_endpoint = module.instances.db_endpoint
+
+  jwt_secret = var.jwt_secret
 }
 
 data "aws_caller_identity" "current" {}

@@ -19,3 +19,17 @@ variable "ecs_ami_id" {
   type        = string
   default     = "ami-0ca63348a6bc46da3"
 }
+
+variable "db_username" {
+  type    = string
+  default = "admin"
+}
+
+variable "database" {
+  default = "fcjresbar"
+}
+
+variable "jwt_secret" {
+  type      = string
+  sensitive = true
+}

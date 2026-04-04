@@ -52,7 +52,8 @@ resource "aws_ecs_task_definition" "backend" {
       project_name = var.project_name,
       container_port = 5000,
       host_port = 80,
-      health_check_url = "http://localhost:5000/"
+      health_check_url = "http://localhost:5000/",
+      env = jsonencode(local.env)
     }
   )
 
