@@ -11,11 +11,20 @@ resource "aws_ecs_task_definition" "frontend" {
   # execution_role_arn = 
 
   runtime_platform {
-    cpu_architecture = "X86_64"
+    cpu_architecture        = "X86_64"
     operating_system_family = "LINUX"
   }
 
-  container_definitions = file("${path.module}/json/frontend.json")
+  container_definitions = templatefile("${path.module}/json/frontend.json",
+    {
+      account_id = data.aws_caller_identity.current.account_id,
+      aws_region = var.aws_region,
+      project_name = var.project_name,
+      container_port = 80,
+      host_port = 80,
+      health_check_url = "http://localhost/"
+    }
+  )
 
 }
 
@@ -32,10 +41,21 @@ resource "aws_ecs_task_definition" "backend" {
   # execution_role_arn = 
 
   runtime_platform {
-    cpu_architecture = "X86_64"
+    cpu_architecture        = "X86_64"
     operating_system_family = "LINUX"
   }
 
-  container_definitions = file("${path.module}/json/backend.json")
+  container_definitions = templatefile("${path.module}/json/backend.json",
+    {
+      account_id = data.aws_caller_identity.current.account_id,
+      aws_region = var.aws_region,
+      project_name = var.project_name,
+      container_port = 5000,
+      host_port = 80,
+      health_check_url = "http://localhost:5000/"
+    }
+  )
 
 }
+
+data "aws_caller_identity" "current" {}

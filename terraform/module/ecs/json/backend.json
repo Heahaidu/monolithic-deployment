@@ -1,12 +1,12 @@
 [
     {
       "name": "backend",
-      "image": "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest",
+      "image": "${account_id}.dkr.ecr.${aws_region}.amazonaws.com/${project_name}/backend:latest",
       "cpu": 0,
       "portMappings": [
         {
-          "containerPort": 5000,
-          "hostPort": 5000,
+          "containerPort": ${container_port},
+          "hostPort": ${host_port},
           "protocol": "tcp",
           "appProtocol": "http"
         }
@@ -18,16 +18,16 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/backend",
+          "awslogs-group": "/ecs/${project_name}/backend",
           "awslogs-create-group": "true",
-          "awslogs-region": "us-east-1",
+          "awslogs-region": "${aws_region}",
           "awslogs-stream-prefix": "ecs"
         }
       },
       "healthCheck": {
         "command": [
           "CMD-SHELL",
-          "wget -qO- http://localhost:8080/actuator/health/liveness || exit 1"
+          "wget -qO- ${health_check_url} || exit 1"
         ],
         "interval": 30,
         "timeout": 5,

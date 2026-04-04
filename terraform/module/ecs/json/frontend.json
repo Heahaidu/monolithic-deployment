@@ -1,12 +1,12 @@
 [
     {
       "name": "frontend",
-      "image": "852368830719.dkr.ecr.us-east-1.amazonaws.com/test/test:latest",
+      "image": "${account_id}.dkr.ecr.${aws_region}.amazonaws.com/${project_name}/frontend:latest",
       "cpu": 0,
       "portMappings": [
         {
-          "containerPort": 80,
-          "hostPort": 80,
+          "containerPort": ${container_port},
+          "hostPort": ${host_port},
           "protocol": "tcp",
           "appProtocol": "http"
         }
@@ -20,14 +20,14 @@
         "options": {
           "awslogs-group": "/ecs/frontend",
           "awslogs-create-group": "true",
-          "awslogs-region": "us-east-1",
+          "awslogs-region": "${aws_region}",
           "awslogs-stream-prefix": "ecs"
         }
       },
       "healthCheck": {
         "command": [
           "CMD-SHELL",
-          "wget -qO- http://localhost/ || exit 1"
+          "wget -qO- ${health_check_url} || exit 1"
         ],
         "interval": 30,
         "timeout": 5,

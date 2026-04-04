@@ -2,12 +2,13 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_NAME    = "monolithic-deployment"
+        PROJECT_NAME    = "monolithic"
 
         AWS_REGION      = "us-east-1"
         IMAGE_TAG       = "${BUILD_NUMBER}"
         ECS_CLUSTER     = "monolithic-ecs-cluster"
-        ECS_SERVICE     = "frontend-service"
+        TASK_DEF_FAMILY = "${PROJECT_NAME}-frontend"
+        SERVICE         = "frontend"
     }
 
     // parameters {
@@ -57,82 +58,43 @@ pipeline {
             }
         }
 
-    //     stage('Deploy via SSM') {
-    //         steps {
-    //             script {
-    //                 def commandId = sh(
-    //                     script: """
-    //                         aws ssm send-command \
-    //                             --region ${AWS_REGION} \
-    //                             --instance-ids ${params.FRONTEND_INSTANCE_ID} \
-    //                             --document-name "AWS-RunShellScript" \
-    //                             --parameters 'commands=[
-    //                                 "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}",
-    //                                 "docker pull ${ECR_REPO}:${IMAGE_TAG}",
-    //                                 "docker stop frontend || true",
-    //                                 "docker rm frontend || true",
-    //                                 "docker run -d --name frontend --restart always -p 80:5173 ${ECR_REPO}:${IMAGE_TAG}",
-    //                                 "docker image prune -f"
-    //                             ]' \
-    //                             --output text \
-    //                             --query Command.CommandId
-    //                     """,
-    //                     returnStdout: true
-    //                 ).trim()
+        stage('Update TaskDefinition') {
+            steps {
+                withAWS(credentials: 'AWS_CREDENTIAL', region: env.AWS_REGION) {
+                    sh """
+                        CUR_TASK_DEF=\$(aws ecs describe-task-definition \
+                            --task-definition ${TASK_DEF_FAMILY} \
+                            --query "taskDefinition" \
+                            --output json
+                        )
 
-    //                 waitForSSM(commandId, params.FRONTEND_INSTANCE_ID)
-    //             }
-    //         }
-    //     }
+                        NEW_TASK_DEF=\$( \
+                            echo \$CUR_TASK_DEF | jq --arg IMAGE ${ECR_REPO}:${IMAGE_TAG} \
+                                '.containerDefinitions[0].image = $IMAGE | \
+                                del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' \
+                        )
 
-    //     stage('Cleanup Local Images') {
-    //         steps {
-    //             sh """
-    //                 docker rmi ${ECR_REPO}:${IMAGE_TAG} || true
-    //                 docker rmi ${ECR_REPO}:latest || true
-    //             """
-    //         }
-    //     }
-    // }
+                        NEW_REVISION=$(aws ecs register-task-definition \
+                                        --cli-input-json "\$NEW_TASK_DEF" \
+                                        --query "taskDefinition.taskDefinitionArn" --output text)
+                        
+                        echo \$NEW_REVISION > frontend_task_def_revision.txt
+                    """
+                }                
+            }
+        }
 
-    // post {
-    //     success {
-    //         echo "Frontend deployed successfully. Image tag: ${IMAGE_TAG}"
-    //     }
-    //     failure {
-    //         echo "Frontend deployment failed."
-    //     }
-    // }
+        stage('Update Service Blue/Green') {
+            steps {
+                withAWS(credentials: 'AWS_CREDENTIAL', region: env.AWS_REGION) {
+                    sh """
+                        NEW_REVISION=\$(cat frontend_task_def_revision.txt)
+
+                        aws ecs update-service --cluster ${ECS_CLUSTER} --service "${SERVICE}" --task-definition \$NEW_REVISION
+                    """
+                }    
+            }
+        }
+
     }
-
-// def waitForSSM(String commandId, String instanceId) {
-//     timeout(time: 5, unit: 'MINUTES') {
-//         waitUntil(initialRecurrencePeriod: 5000) {
-//             def status = sh(
-//                 script: """
-//                     aws ssm get-command-invocation \
-//                         --region ${AWS_REGION} \
-//                         --command-id ${commandId} \
-//                         --instance-id ${instanceId} \
-//                         --query Status \
-//                         --output text
-//                 """,
-//                 returnStdout: true
-//             ).trim()
-
-//             if (status in ['Failed', 'Cancelled', 'TimedOut']) {
-//                 sh """
-//                     aws ssm get-command-invocation \
-//                         --region ${AWS_REGION} \
-//                         --command-id ${commandId} \
-//                         --instance-id ${instanceId} \
-//                         --query StandardErrorContent \
-//                         --output text
-//                 """
-//                 error("SSM command failed with status: ${status}")
-//             }
-
-//             return status == 'Success'
-//         }
-//     }
 }
