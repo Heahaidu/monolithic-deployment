@@ -14,7 +14,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    
+
     await queryInterface.bulkInsert('Users', [
       {
         name: 'Admin',
@@ -28,7 +28,10 @@ module.exports = {
         isAdmin: false,
         password: bcrypt.hashSync('123456', salt)
       }
-    ])
+    ], {
+      ignoreDuplicates: true
+    }
+    )
 
   },
 
@@ -39,7 +42,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-     await queryInterface.bulkDelete('Users',null, {})
+    await queryInterface.bulkDelete('Users', null, {})
 
   }
 };

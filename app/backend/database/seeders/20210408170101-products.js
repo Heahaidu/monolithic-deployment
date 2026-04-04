@@ -44,7 +44,9 @@ module.exports = {
         stock:  70,
         categoryId: gaseosas.id
       }
-    ])
+    ], {
+      ignoreDuplicates: true
+    })
 
   },
 

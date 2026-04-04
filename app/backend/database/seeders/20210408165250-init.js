@@ -26,7 +26,9 @@ module.exports = {
       },{
         name: 'LOMITOS'
       }
-    ])
+    ], {
+      ignoreDuplicates: true
+    })
 
     await queryInterface.bulkInsert('Tables', [
       {
@@ -43,7 +45,9 @@ module.exports = {
       },{
         name: 'BARRA 1'
       }
-    ])
+    ], {
+      ignoreDuplicates: true
+    })
 
     await queryInterface.bulkInsert('Clients', [
       {
@@ -60,7 +64,9 @@ module.exports = {
         phone: '3804123123',
         dni: '40123123'
       },
-    ])
+    ], {
+      ignoreDuplicates: true
+    })
 
   },
 
