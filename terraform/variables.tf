@@ -1,3 +1,7 @@
+variable "project_name" {
+  default = "monolithic"
+}
+
 variable "region" {
   description = "The region to deploy the infrastructure"
   type        = string

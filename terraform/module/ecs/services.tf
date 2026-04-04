@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "frontend" {
-  name = "frontend"
+  name = local.frontend_ecs_service_name
 
   cluster       = aws_ecs_cluster.main.id
   launch_type   = "EC2"
@@ -59,7 +59,7 @@ resource "aws_appautoscaling_policy" "ecs_policy_frontend" {
 }
 
 resource "aws_ecs_service" "backend" {
-  name = "backend"
+  name = local.backend_ecs_service_name
 
   cluster       = aws_ecs_cluster.main.id
   launch_type   = "EC2"
