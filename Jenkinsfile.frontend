@@ -6,7 +6,7 @@ pipeline {
 
         AWS_REGION      = "us-east-1"
         IMAGE_TAG       = "${BUILD_NUMBER}"
-        ECS_CLUSTER     = "monolithic-ecs-cluster"
+        ECS_CLUSTER     = "${PROJECT_NAME}-ecs-cluster"
         TASK_DEF_FAMILY = "${PROJECT_NAME}-frontend"
         SERVICE         = "frontend"
     }
