@@ -7,14 +7,12 @@ exec > /var/log/user_data.log 2>&1
 # sudo systemctl start docker
 # sudo systemctl enable docker
 
-sudo docker run --name jenkins-master -d --restart=on-failure \
-  -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock \
-  -v jenkins_home:/var/jenkins_home --user root jenkins/jenkins:lts-alpine
-
-sudo docker exec jenkins-master apk add --no-cache curl unzip docker-cli aws-cli jq
-
-sudo docker exec jenkins-master jenkins-plugin-cli --plugins "json-path-api blueocean docker-workflow aws-credentials pipeline-aws"
-
-sudo docker restart jenkins-master
+sudo dnf install -y java-17-amazon-corretto
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf install -y jenkins
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
 
 echo "Jenkins setup done!"
